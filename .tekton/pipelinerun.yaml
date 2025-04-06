@@ -1,5 +1,5 @@
 ---
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
   name: pipeline-tutorial-check-pr
@@ -12,7 +12,7 @@ spec:
     - name: source
     tasks:
       - name: fetch
-        taskRef:
+        taskSpec:
           name: git-clone
         params:
           - name: url
@@ -24,13 +24,13 @@ spec:
             workspace: source
       - name: yaml-lint
         runAfter: [fetch]
-        taskRef:
+        taskSpec:
           name: yaml-lint
         params:
           - name: args
             value: ["."]
         workspaces:
-          - name: shared-workspace
+          - name: output
             workspace: source
   params:
     - name: repo_url
